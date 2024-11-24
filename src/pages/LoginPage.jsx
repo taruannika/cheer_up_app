@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import { auth } from "../config/firebase";
+import { auth, googleProvider } from "../config/firebase";
 
 import { MdOutlineEmail as Email } from "react-icons/md";
 import { BiShow as Show } from "react-icons/bi";
 import { BiHide as Hide } from "react-icons/bi";
 
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 const LoginPage = () => {
   const [userCredentials, setUserCredentials] = useState({
@@ -38,9 +38,20 @@ const LoginPage = () => {
       console.log(error);
     }
   };
+
+  const loginWithGoogle = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="max-w-md mx-auto">
       <form className="flex flex-col gap-4 items-center justify-center mt-20 lg:mt-40 px-4">
+        <h2>Login</h2>
         <label className="w-full input input-bordered flex items-center justify-between">
           <input
             type="email"
@@ -83,7 +94,10 @@ const LoginPage = () => {
           </div>
           <div className="divider">OR</div>
           <div className="card  grid h-10 place-items-center">
-            <button className="text-white bg-red-500 w-full p-3 rounded-lg">
+            <button
+              className="text-white bg-red-500 w-full p-3 rounded-lg"
+              onClick={loginWithGoogle}
+            >
               login with Google
             </button>
           </div>

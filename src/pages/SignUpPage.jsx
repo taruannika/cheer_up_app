@@ -8,7 +8,7 @@ import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 import { Link } from "react-router-dom";
 
-import { auth } from "../config/firebase";
+import { auth, googleProvider } from "../config/firebase";
 
 import { useNavigate } from "react-router-dom";
 
@@ -39,9 +39,20 @@ const SignUpPage = () => {
       console.log(error);
     }
   };
+
+  const signInWithGoogle = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="max-w-md mx-auto">
       <form className="flex flex-col gap-4 items-center justify-center mt-20 lg:mt-40 px-4">
+        <h2>Sign Up</h2>
         <label className="w-full input input-bordered flex items-center justify-between">
           <input
             type="email"
@@ -84,7 +95,10 @@ const SignUpPage = () => {
           </div>
           <div className="divider">OR</div>
           <div className="card  grid h-10 place-items-center">
-            <button className="text-white bg-red-500 w-full p-3 rounded-lg">
+            <button
+              className="text-white bg-red-500 w-full p-3 rounded-lg"
+              onClick={signInWithGoogle}
+            >
               Sign Up with Google
             </button>
           </div>

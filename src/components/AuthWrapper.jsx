@@ -7,6 +7,7 @@ import { auth } from "../config/firebase";
 
 const AuthWrapper = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,17 +15,20 @@ const AuthWrapper = ({ children }) => {
       if (user) {
         setUser(user);
       } else {
-        navigate("/signup");
+        setUser(null);
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();
   }, [navigate]);
 
+  if (loading) return <div className="container mx-auto">Loading...</div>;
+
   if (user) {
     return children;
   } else {
-    return null;
+    navigate("/signup");
   }
 };
 
