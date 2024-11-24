@@ -4,6 +4,9 @@ import { NavLink } from "react-router-dom";
 import { IoMdClose as Close } from "react-icons/io";
 import { IoMdMenu as Menu } from "react-icons/io";
 
+import { signOut } from "firebase/auth";
+import { auth } from "../config/firebase";
+
 import Container from "./Container";
 
 const Header = () => {
@@ -15,6 +18,12 @@ const Header = () => {
 
   const CloseMenu = () => {
     setIsOpen(false);
+  };
+
+  const logout = async () => {
+    await signOut(auth);
+    CloseMenu();
+    console.log("Signed out");
   };
 
   return (
@@ -41,7 +50,14 @@ const Header = () => {
           isOpen ? "flex" : "hidden"
         } h-screen z-10 justify-center items-center bg-white w-full absolute top-0 left-0  transition-all`}
       >
-        <div className="relative">mobileMenu</div>
+        <div className="relative">
+          <button
+            className="px-8 py-2 bg-red-500 rounded-lg text-white"
+            onClick={logout}
+          >
+            Logout
+          </button>
+        </div>
 
         <div className="absolute top-5 right-5">
           <Close onClick={CloseMenu} />
